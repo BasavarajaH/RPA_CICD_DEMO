@@ -1,0 +1,116 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+variables:
+  - group: Pipeline_YAML_Variables
+
+
+stages:
+
+  - stage: DeleteOldPackages
+    displayName: delete old build artifact
+
+    jobs: 
+    - job: DeletePackage
+      pool: Default
+      steps:
+      - task: DeleteFiles@1
+        inputs:
+          SourceFolder: '$(Pipeline.Workspace)\drop\'
+          Contents: '**/*.nupkg'
+
+  - stage: Build
+    displayName: Build Package
+    jobs: 
+    - job: BuildPackage
+      pool: Default
+      steps:
+      - task: UiPathPack@2
+        inputs:
+          versionType: 'AutoVersion'
+          projectJsonPath: '$(Build.SourcesDirectory)'
+          outputType: 'Process'
+          orchestratorConnection: 'Azure_Connection_to_Orchestrator-Test_GitHub_Pipeline'
+          outputPath: '$(Build.ArtifactStagingDirectory)'
+
+      - publish: $(Build.ArtifactStagingDirectory)
+        artifact: drop
+
+  - stage: WorkflowAnalyser
+    displayName: RunWorkflow Analyser
+    dependsOn: Build
+    condition: succeeded()
+    jobs:
+        - job: WorkflowAnalyser
+          displayName: AnalyseProject Using Workflow Cli
+          pool: Default
+          steps:
+          - task: PowerShell@2
+            inputs:
+              targetType: filePath
+              filePath: $(WA_PS_Script_Path)
+              arguments: > 
+                -ProjectFilePath $(Build.SourcesDirectory)\project.json
+                -ExecutableFilePath "$(WA_ExecutableFilePath)"
+                -OutputFilePath '$(WA_OutputFilePath)'
+              workingDirectory: $(Build.SourcesDirectory)
+            displayName: 'Analyse Project'
+
+  - stage: DeploytoDEV 
+    displayName: Deploy build artifact to DEV
+    dependsOn: Build
+    condition: succeeded()
+    jobs:
+      - deployment: deployDEV
+        displayName: Deploy package to DEV Orchestrator
+        pool: Default
+        environment: DEV
+        strategy:
+         runOnce:
+          deploy:
+           steps:
+            - task: UiPathDeploy@2
+              inputs:
+                 orchestratorConnection: 'Azure_Connection_to_Orchestrator-Test_GitHub_Pipeline'
+                 packagesPath: '$(Pipeline.Workspace)\drop\'
+                 folderName: '$(Orchestrator_Folder_Name)'
+                 entryPoints: 'Main.xaml'
+
+  - stage: AssetInDEV 
+    displayName: Create Assests In DEV
+    dependsOn: DeploytoDEV
+    condition: succeeded()
+    jobs:
+      - job: CreateAssestsInDEV
+        pool: Default
+        steps:
+        - task: UiPathAssets@2
+          inputs:
+            orchestratorConnection: 'Azure_Connection_to_Orchestrator-Test_GitHub_Pipeline'
+            folderName: $(Orchestrator_Folder_Name)
+            assetActionType: 'Deploy'
+            csvFile: '$(Asset_File_Path)'
+
+  - stage: CopyFiles 
+    displayName: copy build artifact
+    dependsOn: DeploytoDEV
+    condition: succeeded()
+    jobs: 
+    - job: CopyPackage
+      pool: Default
+      steps:
+      - task: CopyFiles@2
+        inputs:
+          SourceFolder: '$(Pipeline.Workspace)\drop\'
+          Contents: '**'
+          TargetFolder: '$(Package_Repo_Folder)'
+          OverWrite: true
+
+
+
+

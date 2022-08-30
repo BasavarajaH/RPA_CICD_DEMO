@@ -1,0 +1,4 @@
+name,type,value
+Test_Text_value,Text,Text value
+Test_Integer_Value,integer,15
+Test_Bool_Value,boolean,TRUE
