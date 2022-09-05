@@ -13,6 +13,9 @@ parameters:
 - name: ITG
   default:
   type: boolean
+  values:
+    - false
+    - true
 stages:
 
   - stage: DeleteOldPackages
