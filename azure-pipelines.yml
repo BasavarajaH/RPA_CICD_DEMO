@@ -11,7 +11,6 @@ variables:
 
 parameters:
 - name: ITG
-  default: True
   type: boolean
 stages:
 
