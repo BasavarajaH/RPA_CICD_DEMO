@@ -11,7 +11,7 @@ variables:
 
 parameters:
 - name: ITG
-  default: false
+  default: True
   type: boolean
 stages:
 
@@ -100,7 +100,7 @@ stages:
             csvFile: '$(Asset_File_Path)'
 
   - stage: deployInITG
-    displayName: copy build artifact to ITG
+    displayName: deploy build artifact to ITG
     condition: eq('${{ parameters.ITG }}', 'true')
     jobs:
       - deployment: deployITG
