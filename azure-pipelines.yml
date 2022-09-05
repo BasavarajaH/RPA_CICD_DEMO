@@ -26,7 +26,7 @@ stages:
       steps:
       - task: UiPathPack@2
         inputs:
-          versionType: 'AutoVersion'
+          versionType: 'CurrentVersion'
           projectJsonPath: '$(Build.SourcesDirectory)'
           outputType: 'Process'
           orchestratorConnection: 'Azure_Connection_to_Orchestrator-Test_GitHub_Pipeline'
@@ -75,6 +75,7 @@ stages:
                  folderName: '$(Orchestrator_Folder_Name)'
                  entryPoints: 'Main.xaml'
 
+
   - stage: AssetInDEV 
     displayName: Create Assests In DEV
     dependsOn: DeploytoDEV
@@ -89,6 +90,7 @@ stages:
             folderName: $(Orchestrator_Folder_Name)
             assetActionType: 'Deploy'
             csvFile: '$(Asset_File_Path)'
+            
 
   - stage: deployInITG
     displayName: deploy build artifact to ITG
@@ -139,6 +141,7 @@ stages:
           Contents: '**'
           TargetFolder: '$(Package_Repo_Folder)'
           OverWrite: true
+
 
 
 
