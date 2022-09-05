@@ -11,10 +11,9 @@ variables:
 
 parameters:
 - name: ITG
-
-  values:
-    - true
-    - false
+- name: doThing
+  default:  # value passed to the condition
+  type: boolean
 stages:
 
   - stage: DeleteOldPackages
