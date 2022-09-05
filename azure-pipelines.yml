@@ -28,7 +28,7 @@ stages:
         inputs:
           versionType: 'ManualVersion'
           version: '$(Build.BuildNumber)'
-          projectJsonPath: '$(Build.ArtifactStagingDirectory)'
+          projectJsonPath: '$(Build.SourcesDirectory)'
           outputType: 'Process'
           orchestratorConnection: 'Azure_Connection_to_Orchestrator-Test_GitHub_Pipeline'
           outputPath: '$(Build.ArtifactStagingDirectory)'
