@@ -32,6 +32,8 @@ stages:
           outputType: 'Process'
           orchestratorConnection: 'Azure_Connection_to_Orchestrator-Test_GitHub_Pipeline'
           outputPath: '$(Build.ArtifactStagingDirectory)\Output\'
+          version: '$(Latest)'
+
 
       - publish: '$(Build.ArtifactStagingDirectory)\Output\'
         artifact: drop
