@@ -11,8 +11,7 @@ variables:
 
 parameters:
 - name: ITG
-- name: doThing
-  default:  # value passed to the condition
+  default:
   type: boolean
 stages:
 
