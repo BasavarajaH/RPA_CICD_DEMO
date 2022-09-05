@@ -27,7 +27,7 @@ stages:
       - task: UiPathPack@2
         inputs:
           versionType: 'ManualVersion'
-          version: '$(Build.BuildNumber)'
+          version: '$(Build.DefinitionName)_$(Date:yyyyMMdd)$(Rev:.r)'
           projectJsonPath: '$(Build.SourcesDirectory)'
           outputType: 'Process'
           orchestratorConnection: 'Azure_Connection_to_Orchestrator-Test_GitHub_Pipeline'
