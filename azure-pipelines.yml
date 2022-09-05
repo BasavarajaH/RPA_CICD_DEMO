@@ -26,7 +26,7 @@ stages:
       steps:
       - task: UiPathPack@2
         inputs:
-          versionType: 'CurrentVersion'
+          versionType: 'AutoVersion'
           version: 'Latest'
           projectJsonPath: '$(Build.SourcesDirectory)'
           outputType: 'Process'
