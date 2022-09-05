@@ -31,9 +31,9 @@ stages:
           projectJsonPath: '$(Build.SourcesDirectory)'
           outputType: 'Process'
           orchestratorConnection: 'Azure_Connection_to_Orchestrator-Test_GitHub_Pipeline'
-          outputPath: '$(Build.ArtifactStagingDirectory)'
+          outputPath: '$(Build.ArtifactStagingDirectory)\Output'
 
-      - publish: $(Build.ArtifactStagingDirectory)
+      - publish: $(Build.ArtifactStagingDirectory)\Output
         artifact: drop
 
   - stage: WorkflowAnalyser
@@ -72,8 +72,8 @@ stages:
             - task: UiPathDeploy@2
               inputs:
                  orchestratorConnection: 'Azure_Connection_to_Orchestrator-Test_GitHub_Pipeline'
-                 version: 'Latest'
-                 packagesPath: '$(Pipeline.Workspace)\drop\'
+
+                 packagesPath: '$(Build.ArtifactStagingDirectory)\Output'
                  folderName: '$(Orchestrator_Folder_Name)'
                  entryPoints: 'Main.xaml'
 
@@ -110,7 +110,7 @@ stages:
             - task: UiPathDeploy@2
               inputs:
                  orchestratorConnection: 'Azure_Connection_to_ITG_Finance_Tenant-Test_GitHub_Pipeline'
-                 packagesPath: '$(Pipeline.Workspace)\drop\'
+                 packagesPath: '$(Build.ArtifactStagingDirectory)\Output'
                  folderName: '$(Orchestrator_Folder_Name)'
                  entryPoints: 'Main.xaml'
 
