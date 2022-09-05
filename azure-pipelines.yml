@@ -102,7 +102,7 @@ stages:
 
   - stage: deployInITG
     displayName: deploy build artifact to ITG
-    dependsOn: Build
+    dependsOn: AssetInDEV
     condition: and(succeeded(), eq('${{ parameters.ITG }}', 'true'))
     jobs:
       - deployment: deployITG
