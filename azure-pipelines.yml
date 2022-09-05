@@ -27,12 +27,13 @@ stages:
       - task: UiPathPack@2
         inputs:
           versionType: 'CurrentVersion'
+          version: 'Latest'
           projectJsonPath: '$(Build.SourcesDirectory)'
           outputType: 'Process'
           orchestratorConnection: 'Azure_Connection_to_Orchestrator-Test_GitHub_Pipeline'
-          outputPath: '$(Build.ArtifactStagingDirectory)\Output'
+          outputPath: '$(Build.ArtifactStagingDirectory)'
 
-      - publish: $(Build.ArtifactStagingDirectory)\Output
+      - publish: $(Build.ArtifactStagingDirectory)
         artifact: drop
 
   - stage: WorkflowAnalyser
