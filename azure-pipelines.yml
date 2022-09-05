@@ -67,8 +67,8 @@ stages:
 
   - stage: DeploytoDEV 
     displayName: Deploy build artifact to DEV
-    dependsOn: Build
-    condition: succeeded()
+    dependsOn: WorkflowAnalyser
+    condition: succeededOrFailed()
     jobs:
       - deployment: deployDEV
         displayName: Deploy package to DEV Orchestrator
@@ -102,7 +102,8 @@ stages:
 
   - stage: deployInITG
     displayName: deploy build artifact to ITG
-    condition: eq('${{ parameters.ITG }}', true)
+    dependsOn: Build
+    condition: and(succeeded(), eq('${{ parameters.ITG }}', 'true'))
     jobs:
       - deployment: deployITG
         displayName: Deploy package to ITG Orchestrator
@@ -118,6 +119,21 @@ stages:
                  packagesPath: '$(Pipeline.Workspace)\drop\'
                  folderName: '$(Orchestrator_Folder_Name)'
                  entryPoints: 'Main.xaml'
+
+  - stage: AssetInITG
+    displayName: Create Assests In ITG
+    dependsOn: deployInITG
+    condition: succeeded()
+    jobs:
+      - job: CreateAssestsInITG
+        pool: Default
+        steps:
+        - task: UiPathAssets@2
+          inputs:
+            orchestratorConnection: 'Azure_Connection_to_ITG_Finance_Tenant-Test_GitHub_Pipeline'
+            folderName: $(Orchestrator_Folder_Name)
+            assetActionType: 'Deploy'
+            csvFile: '$(Asset_File_Path)'
 
   - stage: CopyFiles 
     displayName: copy build artifact
