@@ -31,9 +31,9 @@ stages:
           projectJsonPath: '$(Build.SourcesDirectory)'
           outputType: 'Process'
           orchestratorConnection: 'Azure_Connection_to_Orchestrator-Test_GitHub_Pipeline'
-          outputPath: '$(Build.ArtifactStagingDirectory)\Output'
+          outputPath: '$(Build.ArtifactStagingDirectory)\Output\'
 
-      - publish: $(Build.ArtifactStagingDirectory)\Output
+      - publish: '$(Build.ArtifactStagingDirectory)\Output\'
         artifact: drop
 
   - stage: WorkflowAnalyser
