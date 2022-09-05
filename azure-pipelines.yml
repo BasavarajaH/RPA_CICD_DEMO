@@ -27,7 +27,8 @@ stages:
       - task: UiPathPack@2
         inputs:
           versionType: 'ManualVersion'
-          version: '$(TeamProject)_$(BuildDefinitionName)_$(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:.r)'
+          version: '$(Build.BuildNumber)'
+
           projectJsonPath: '$(Build.SourcesDirectory)'
           outputType: 'Process'
           orchestratorConnection: 'Azure_Connection_to_Orchestrator-Test_GitHub_Pipeline'
@@ -71,7 +72,7 @@ stages:
             - task: UiPathDeploy@2
               inputs:
                  orchestratorConnection: 'Azure_Connection_to_Orchestrator-Test_GitHub_Pipeline'
-                 packagesPath: '$(Pipeline.Workspace)\drop\'
+                 packagesPath: '$(Pipeline.Workspace)\drop\$Build.DefinitionName.$$(Build.BuildNumber)'
                  folderName: '$(Orchestrator_Folder_Name)'
                  entryPoints: 'Main.xaml'
 
