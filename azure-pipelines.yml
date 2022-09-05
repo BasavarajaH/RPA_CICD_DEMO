@@ -142,10 +142,5 @@ stages:
           TargetFolder: '$(Package_Repo_Folder)'
           OverWrite: true
 
-- task: UiPathDeploy@2
-  inputs:
-    orchestratorConnection: 'Azure_Connection_to_Orchestrator-Test_GitHub_Pipeline'
-    packagesPath: '$(Pipeline.Workspace)/drop/$(Build.BuildNumber)'
-    folderName: 'Finance'
 
 
