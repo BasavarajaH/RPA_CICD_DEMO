@@ -9,7 +9,10 @@ trigger:
 variables:
   - group: Pipeline_YAML_Variables
 
-
+parameters:
+- name: ITG
+  default: false
+  type: boolean
 stages:
 
   - stage: DeleteOldPackages
@@ -95,6 +98,25 @@ stages:
             folderName: $(Orchestrator_Folder_Name)
             assetActionType: 'Deploy'
             csvFile: '$(Asset_File_Path)'
+
+  - stage: deployInITG
+    displayName: copy build artifact to ITG
+    condition: eq('${{ parameters.ITG }}', 'true')
+    jobs:
+      - deployment: deployITG
+        displayName: Deploy package to ITG Orchestrator
+        pool: Default
+        environment: ITG
+        strategy:
+         runOnce:
+          deploy:
+           steps:
+            - task: UiPathDeploy@2
+              inputs:
+                 orchestratorConnection: 'Azure_Connection_to_ITG_Finance_Tenant-Test_GitHub_Pipeline'
+                 packagesPath: '$(Pipeline.Workspace)\drop\'
+                 folderName: '$(Orchestrator_Folder_Name)'
+                 entryPoints: 'Main.xaml'
 
   - stage: CopyFiles 
     displayName: copy build artifact
