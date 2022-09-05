@@ -24,13 +24,12 @@ stages:
     displayName: delete old build artifact
     jobs: 
     - job: DeletePackage
-    pool: Default
-
-=    steps:
-    - task: DeleteFiles@1
-      inputs:
-        SourceFolder: '$(Pipeline.Workspace)\drop\'
-        Contents: '**/*.nupkg'
+      pool: Default
+      steps:
+      - task: DeleteFiles@1
+        inputs:
+         SourceFolder: '$(Pipeline.Workspace)\drop\'
+         Contents: '**/*.nupkg'
 
   - stage: Build
     displayName: Build Package
@@ -123,7 +122,7 @@ stages:
             - task: UiPathDeploy@2
               inputs:
                  orchestratorConnection: 'Azure_Connection_to_ITG_Finance_Tenant-Test_GitHub_Pipeline'
-                 packagesPath: '$(Build.ArtifactStagingDirectory)\Output'
+                 packagesPath: '$(Pipeline.Workspace)\drop\'
                  folderName: '$(Orchestrator_Folder_Name)'
                  entryPoints: 'Main.xaml'
 
