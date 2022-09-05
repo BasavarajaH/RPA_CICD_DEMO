@@ -11,7 +11,7 @@ variables:
 
 parameters:
 - name: ITG
-  default: true
+  default: false
   type: boolean
 
 stages:
@@ -102,7 +102,7 @@ stages:
 
   - stage: deployInITG
     displayName: deploy build artifact to ITG
-    condition: eq('${{ parameters.ITG }}', 'true')
+    condition: eq('${{ parameters.ITG }}', true)
     jobs:
       - deployment: deployITG
         displayName: Deploy package to ITG Orchestrator
