@@ -14,7 +14,9 @@ parameters:
   default: true
   type: boolean
 
-
+- name: ProcessName
+  type: string
+  default: 'RPA_CICD_DEMO'
 
 
 
@@ -76,7 +78,7 @@ stages:
             - task: UiPathDeploy@2
               inputs:
                  orchestratorConnection: 'Azure_Connection_to_Orchestrator-Test_GitHub_Pipeline'
-                 packagesPath: '$(Pipeline.Workspace)\drop\RPA_CICD_DEMO.$(Build.BuildNumber).0.nupkg'
+                 packagesPath: '$(Pipeline.Workspace)\drop\${{ parameters.ProcessName }}.$(Build.BuildNumber).0.nupkg'
                  folderName: '$(Orchestrator_Folder_Name)'
                  entryPoints: 'Main.xaml'
 
