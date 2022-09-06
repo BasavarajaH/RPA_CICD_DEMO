@@ -85,7 +85,7 @@ stages:
             - task: UiPathDeploy@2
               inputs:
                  orchestratorConnection: 'Azure_Connection_to_Orchestrator-Test_GitHub_Pipeline'
-                 packagesPath: '$(Pipeline.Workspace)\drop\*$(Build.BuildNumber)'
+                 packagesPath: '$(Pipeline.Workspace)\drop\.*$(Build.BuildNumber)'
                  folderName: '$(Orchestrator_Folder_Name)'
                  entryPoints: 'Main.xaml'
 
