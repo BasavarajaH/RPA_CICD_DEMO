@@ -18,7 +18,17 @@ parameters:
 - name: ProcessName
   type: string
   default: 'RPA_CICD_DEMO'
-  displayName: Name of the package from Project json file
+  displayName: Name of the process from Project json file
+
+- name: DevOrchestratorConnectionString
+  type: string
+  default: 'Azure_Connection_to_Orchestrator-Test_GitHub_Pipeline'
+  displayName: Name of the Dev orchestrator Connection String
+
+- name: ITGOrchestratorConnectionString
+  type: string
+  default: 'Azure_Connection_to_ITG_Finance_Tenant-Test_GitHub_Pipeline'
+  displayName: Name of the ITG orchestrator Connection String
 
 - name: DevOrchestratorFolderName
   type: string
@@ -45,7 +55,7 @@ stages:
 
           projectJsonPath: '$(Build.SourcesDirectory)'
           outputType: 'Process'
-          orchestratorConnection: 'Azure_Connection_to_Orchestrator-Test_GitHub_Pipeline'
+          orchestratorConnection: '${{ parameters.DevOrchestratorConnectionString }}'
           outputPath: '$(Build.ArtifactStagingDirectory)'
       - publish: '$(Build.ArtifactStagingDirectory)'
         artifact: drop
@@ -71,7 +81,7 @@ stages:
             displayName: 'Analyse Project'
 
   - stage: DeploytoDEV 
-    displayName: Deploy build artifact to DEV
+    displayName: Deploy  Package to DEV environment
     dependsOn: WorkflowAnalyser
     condition: succeededOrFailed()
     jobs:
@@ -85,7 +95,7 @@ stages:
            steps:
             - task: UiPathDeploy@2
               inputs:
-                 orchestratorConnection: 'Azure_Connection_to_Orchestrator-Test_GitHub_Pipeline'
+                 orchestratorConnection: '${{ parameters.DevOrchestratorConnectionString }}'
                  packagesPath: '$(Pipeline.Workspace)\drop\${{ parameters.ProcessName }}.$(Build.BuildNumber).0.nupkg'
                  folderName: '${{ parameters.DevOrchestratorFolderName }}'
                  entryPoints: 'Main.xaml'
@@ -101,7 +111,7 @@ stages:
         steps:
         - task: UiPathAssets@2
           inputs:
-            orchestratorConnection: 'Azure_Connection_to_Orchestrator-Test_GitHub_Pipeline'
+            orchestratorConnection: '${{ parameters.DevOrchestratorConnectionString }}'
             folderName: '${{ parameters.DevOrchestratorFolderName }}'
             assetActionType: 'Deploy'
             csvFile: '$(Asset_File_Path)'
@@ -122,7 +132,7 @@ stages:
            steps:
             - task: UiPathDeploy@2
               inputs:
-                 orchestratorConnection: 'Azure_Connection_to_ITG_Finance_Tenant-Test_GitHub_Pipeline'
+                 orchestratorConnection: '${{ parameters.ITGOrchestratorConnectionString }}'
                  packagesPath: '$(Pipeline.Workspace)\drop\${{ parameters.ProcessName }}.$(Build.BuildNumber).0.nupkg'
                  folderName: ${{ parameters.ITGOrchestratorFolderName }}
                  entryPoints: 'Main.xaml'
@@ -137,7 +147,7 @@ stages:
         steps:
         - task: UiPathAssets@2
           inputs:
-            orchestratorConnection: 'Azure_Connection_to_ITG_Finance_Tenant-Test_GitHub_Pipeline'
+            orchestratorConnection: '${{ parameters.ITGOrchestratorConnectionString }}'
             folderName: ${{ parameters.ITGOrchestratorFolderName }}
             assetActionType: 'Deploy'
             csvFile: '$(Asset_File_Path)'
