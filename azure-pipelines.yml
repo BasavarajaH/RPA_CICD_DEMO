@@ -76,7 +76,7 @@ stages:
               arguments: > 
                 -ProjectFilePath $(Build.SourcesDirectory)\project.json
                 -ExecutableFilePath "$(WA_ExecutableFilePath)"
-                -OutputFilePath '$(Pipeline.Workspace)\drop\${{ parameters.ProcessName }}.$(Build.BuildNumber).0_$(Get-Date -Format 'yyyy-MM-dd-HH-mm-ss')-Workflow-Analysis.json'
+                -OutputFilePath '$(Pipeline.Workspace)\drop\${{ parameters.ProcessName }}.$(Build.BuildNumber).0_Workflow-Analysis.json'
               workingDirectory: $(Build.SourcesDirectory)
             displayName: 'Analyse Project'
 
