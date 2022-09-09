@@ -152,20 +152,7 @@ stages:
             assetActionType: 'Deploy'
             csvFile: '$(Asset_File_Path)'
 
-  - stage: CopyFiles 
-    displayName: copy build artifact
-    dependsOn: DeploytoDEV
-    condition: succeeded()
-    jobs: 
-    - job: CopyPackage
-      pool: Default
-      steps:
-      - task: CopyFiles@2
-        inputs:
-          SourceFolder: $(Pipeline.Workspace)\drop\
-          Contents: '**'
-          TargetFolder: '$(Package_Repo_Folder)'
-          OverWrite: true
+
 
 
 
