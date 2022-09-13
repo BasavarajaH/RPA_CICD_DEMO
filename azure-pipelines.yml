@@ -156,7 +156,7 @@ stages:
 
   - stage: CopyFiles
     displayName: copy build artifact
-    dependsOn: DeploytoDEV
+    dependsOn: AssetInITG
     condition: succeeded()
     jobs:
      - job: CopyPackage
@@ -171,6 +171,8 @@ stages:
 
   - stage: DeleteOldPackages
     displayName: delete old build artifact
+    dependsOn: CopyFiles
+    condition: succeeded()
     jobs:
      - job: DeletePackage
        pool: Default
