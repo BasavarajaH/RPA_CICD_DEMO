@@ -51,7 +51,7 @@ stages:
       - task: UiPathPack@2
         inputs:
           versionType: 'ManualVersion'
-          version: '$(Build.BuildNumber)'
+          version: '$(Date:yyyyMMdd)$(Rev:.r)'
 
           projectJsonPath: '$(Build.SourcesDirectory)'
           outputType: 'Process'
