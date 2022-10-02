@@ -60,6 +60,26 @@ stages:
       - publish: '$(Build.ArtifactStagingDirectory)'
         artifact: drop
 
+  - stage: deployInITG
+    displayName: deploy build artifact to ITG
+    dependsOn: Build
+    condition: succeeded()
+    jobs:
+      - deployment: deployITG
+        displayName: Deploy package to ITG Orchestrator
+        pool: Default
+        environment: ITG
+        strategy:
+         runOnce:
+          deploy:
+           steps:
+            - task: UiPathDeploy@2
+              inputs:
+                 orchestratorConnection: '${{ parameters.ITGOrchestratorConnectionString }}'
+                 packagesPath: '$(Pipeline.Workspace)\drop\${{ parameters.ProcessName }}.$(Build.BuildNumber).0.nupkg'
+                 folderName: "APJ_China_Automation"
+                 entryPoints: 'Main.xaml'
+
   - stage: WorkflowAnalyser
     displayName: RunWorkflow Analyser
     dependsOn: Build
@@ -117,25 +137,7 @@ stages:
             csvFile: '$(Asset_File_Path)'
             
 
-  - stage: deployInITG
-    displayName: deploy build artifact to ITG
-    dependsOn: AssetInDEV
-    condition: and(succeeded(), eq('${{ parameters.ITG }}', 'true'))
-    jobs:
-      - deployment: deployITG
-        displayName: Deploy package to ITG Orchestrator
-        pool: Default
-        environment: ITG
-        strategy:
-         runOnce:
-          deploy:
-           steps:
-            - task: UiPathDeploy@2
-              inputs:
-                 orchestratorConnection: '${{ parameters.ITGOrchestratorConnectionString }}'
-                 packagesPath: '$(Pipeline.Workspace)\drop\${{ parameters.ProcessName }}.$(Build.BuildNumber).0.nupkg'
-                 folderName: ${{ parameters.ITGOrchestratorFolderName }}
-                 entryPoints: 'Main.xaml'
+
 
   - stage: AssetInITG
     displayName: Create Assests In ITG
