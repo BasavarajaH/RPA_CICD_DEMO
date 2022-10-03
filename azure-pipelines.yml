@@ -79,7 +79,7 @@ stages:
                 param 
                 (
                    $ProjectFilePath='$(Build.SourcesDirectory)\project.json',
-                   $ExecutableFilePath=$(WA_ExecutableFilePath)
+                   $ExecutableFilePath=$(WA_ExecutableFilePath),
                    $OutputFilePath='$(Pipeline.Workspace)\drop\${{ parameters.ProcessName }}_$(Build.BuildNumber)_Workflow-Analysis.json'
                 )
 
