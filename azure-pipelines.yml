@@ -130,7 +130,7 @@ stages:
 
   - stage: AssetInITG
     displayName: Create Assests In ITG
-    dependsOn: deployInITG
+    dependsOn: AssetInDEV
     condition: succeeded()
     jobs:
       - job: CreateAssestsInITG
