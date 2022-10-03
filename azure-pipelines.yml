@@ -75,7 +75,7 @@ stages:
             inputs:
               targetType: 'inline'
               script: |
-                # Write your PowerShell commands here.
+                # Write your PowerShell commands here $(WA_ExecutableFilePath)
                 
                 param (
                     $ProjectFilePath="$(Build.SourcesDirectory)\project.json",
