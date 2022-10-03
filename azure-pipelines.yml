@@ -83,7 +83,7 @@ stages:
                     $OutputFilePath="$(Pipeline.Workspace)\drop\${{ parameters.ProcessName }}_$(Build.BuildNumber)_Workflow-Analysis.json"
                     )
                 
-                Write-Output "$(Get-Date -Format 'HH:mm:ss') - STARTED - Workflow Analyzer CLI Script"
+                #Write-Output "$(Get-Date -Format 'HH:mm:ss') - STARTED - Workflow Analyzer CLI Script"
                 
                 $Command = "$ExecutableFilePath analyze -p $ProjectFilePath"
                 Invoke-Expression $Command | Out-File -FilePath $OutputFilePath
