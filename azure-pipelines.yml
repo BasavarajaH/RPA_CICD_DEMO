@@ -75,14 +75,12 @@ stages:
             inputs:
               targetType: 'inline'
               script: |
-                # Write your PowerShell commands here $(WA_ExecutableFilePath)
-                Write-Host $ProjectFilePath = "$(Build.SourcesDirectory)\project.json"
-                Write-Host $ExecutableFilePath = "$(WA_ExecutableFilePath)"
-                Write-Host $OutputFilePath = "$(Pipeline.Workspace)\drop\${{ parameters.ProcessName }}_$(Build.BuildNumber)_Workflow-Analysis.json"
 
-                
-                #Write-Output "$(Get-Date -Format 'HH:mm:ss') - STARTED - Workflow Analyzer CLI Script"
-                
+                param (
+                 $ProjectFilePath="$(Build.SourcesDirectory)\project.json",
+                 $ExecutableFilePath="$(WA_ExecutableFilePath)",
+                 $OutputFilePath="$(Pipeline.Workspace)\drop\${{ parameters.ProcessName }}_$(Build.BuildNumber)_Workflow-Analysis.json"
+                      )
                 $Command = "$ExecutableFilePath analyze -p $ProjectFilePath"
                 Invoke-Expression $Command | Out-File -FilePath $OutputFilePath
 
