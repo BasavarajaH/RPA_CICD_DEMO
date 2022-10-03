@@ -76,11 +76,12 @@ stages:
               targetType: 'inline'
               script: |
 
-                param (
-                [string]$ProjectFilePath='$(Build.SourcesDirectory)\project.json',
-                [string]$ExecutableFilePath="$(WA_ExecutableFilePath)"
-                [string]$OutputFilePath='$(Pipeline.Workspace)\drop\${{ parameters.ProcessName }}_$(Build.BuildNumber)_Workflow-Analysis.json'
-                      )
+                param 
+                (
+                   $ProjectFilePath='$(Build.SourcesDirectory)\project.json',
+                   $ExecutableFilePath="$(WA_ExecutableFilePath)"
+                   $OutputFilePath='$(Pipeline.Workspace)\drop\${{ parameters.ProcessName }}_$(Build.BuildNumber)_Workflow-Analysis.json'
+                )
 
 
                 $Command = "$ExecutableFilePath analyze -p $ProjectFilePath"
