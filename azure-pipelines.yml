@@ -77,10 +77,9 @@ stages:
               script: |
 
                 param (
-                 [Parameter(Mandatory=$true)][string]$ProjectFilePath='$(Build.SourcesDirectory)\project.json',
-                 [Parameter(Mandatory=$true)][string]$ExecutableFilePath="$(WA_ExecutableFilePath)"
-                 [Parameter(Mandatory=$true)][string]$OutputFilePath='$(Pipeline.Workspace)\drop\${{ parameters.ProcessName }}_$(Build.BuildNumber)_Workflow-Analysis.json'
-
+                [string]$ProjectFilePath='$(Build.SourcesDirectory)\project.json',
+                [string]$ExecutableFilePath="$(WA_ExecutableFilePath)"
+                [string]$OutputFilePath='$(Pipeline.Workspace)\drop\${{ parameters.ProcessName }}_$(Build.BuildNumber)_Workflow-Analysis.json'
                       )
 
 
