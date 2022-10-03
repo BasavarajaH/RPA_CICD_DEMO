@@ -91,14 +91,22 @@ stages:
           steps:
           - task: PowerShell@2
             inputs:
-              targetType: filePath
-              filePath: $(WA_PS_Script_Path)
-              arguments: > 
-                -ProjectFilePath $(Build.SourcesDirectory)\project.json
-                -ExecutableFilePath "$(WA_ExecutableFilePath)"
-                -OutputFilePath '$(Pipeline.Workspace)\drop\${{ parameters.ProcessName }}.$(Build.BuildNumber).0_Workflow-Analysis.json'
-              workingDirectory: $(Build.SourcesDirectory)
-            displayName: 'Analyse Project'
+              targetType: 'inline'
+              script: |
+                # Write your PowerShell commands here.
+                
+                param (
+                    $ProjectFilePath="$(Build.SourcesDirectory)\project.json",
+                    $ExecutableFilePath="$(WA_ExecutableFilePath)",
+                    $OutputFilePath="$(Pipeline.Workspace)\drop\${{ parameters.ProcessName }}_$(Build.BuildNumber)_Workflow-Analysis.json"
+                    )
+                
+                Write-Output "$(Get-Date -Format 'HH:mm:ss') - STARTED - Workflow Analyzer CLI Script"
+                
+                $Command = "$ExecutableFilePath analyze -p $ProjectFilePath"
+                Invoke-Expression $Command | Out-File -FilePath $OutputFilePath
+                
+                Write-Output "$(Get-Date -Format 'HH:mm:ss') - COMPLETED - Workflow Analyzer CLI Script"
 
   - stage: DeploytoDEV 
     displayName: Deploy  Package to DEV environment
