@@ -77,14 +77,12 @@ stages:
               script: |
 
                 param (
-                 [string]$ProjectFilePath,
-                 [string]$ExecutableFilePath,
-                 [string]$OutputFilePath
+                 [Parameter(Mandatory=$true)][string]$ProjectFilePath='$(Build.SourcesDirectory)\project.json',
+                 [Parameter(Mandatory=$true)][string]$ExecutableFilePath="$(WA_ExecutableFilePath)"
+                 [Parameter(Mandatory=$true)][string]$OutputFilePath='$(Pipeline.Workspace)\drop\${{ parameters.ProcessName }}_$(Build.BuildNumber)_Workflow-Analysis.json'
+
                       )
-                  arguments: > 
-                -ProjectFilePath $(Build.SourcesDirectory)\project.json
-                -ExecutableFilePath "$(WA_ExecutableFilePath)"
-                -OutputFilePath '$(Pipeline.Workspace)\drop\${{ parameters.ProcessName }}_$(Build.BuildNumber)_Workflow-Analysis.json'
+
 
                 $Command = "$ExecutableFilePath analyze -p $ProjectFilePath"
                 Invoke-Expression $Command | Out-File -FilePath $OutputFilePath
