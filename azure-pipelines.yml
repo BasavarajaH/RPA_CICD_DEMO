@@ -76,17 +76,12 @@ stages:
               targetType: 'inline'
               script: |
 
-                param 
-                (
                    $ProjectFilePath='$(Build.SourcesDirectory)\project.json',
                    $ExecutableFilePath=$(WA_ExecutableFilePath),
                    $OutputFilePath='$(Pipeline.Workspace)\drop\${{ parameters.ProcessName }}_$(Build.BuildNumber)_Workflow-Analysis.json'
-                )
-
-
-                $Command = "$ExecutableFilePath analyze -p $ProjectFilePath"
-                Invoke-Expression $Command | Out-File -FilePath $OutputFilePath
-                workingDirectory: $(Build.SourcesDirectory)
+                   $Command = "$ExecutableFilePath analyze -p $ProjectFilePath"
+                   Invoke-Expression $Command | Out-File -FilePath $OutputFilePath
+                   workingDirectory: $(Build.SourcesDirectory)
 
 
   - stage: DeploytoDEV 
